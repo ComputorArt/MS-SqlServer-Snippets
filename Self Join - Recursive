@@ -1,0 +1,26 @@
+create table UserSelfJoinTest
+(
+	 user_id varchar(20)
+	,reporting varchar(20)
+)
+
+
+insert into UserSelfJoinTest
+values 
+('A','B'),
+('C','D'),
+('D','E'),
+('B','C')
+go
+
+
+;with cte As
+(
+select *,1 as level from UserSelfJoinTest A where user_id = 'A'
+Union all
+select b.user_id,b.reporting,cte.level + 1  as level from cte
+JOin UserSelfJoinTest B on cte.reporting = b.user_id
+)
+select * from cte 
+
+
